@@ -4,10 +4,23 @@ namespace App\Http\Controllers;
 
 use App\Models\Doctor;
 use App\Models\User;
+use App\Models\Specialization;
 use Illuminate\Http\Request;
 
 class DoctorController extends Controller
 {
+    /**
+     * Get all specializations.
+     */
+    public function getSpecializations()
+    {
+        $specializations = Specialization::all();
+
+        return response()->json([
+            'specializations' => $specializations,
+        ], 200);
+    }
+
     /**
      * Get doctor profile.
      */

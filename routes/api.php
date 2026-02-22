@@ -24,6 +24,7 @@ Route::post('/auth/login', [LoginController::class, 'login']);
 Route::post('/auth/complete-doctor-profile', [RegisterController::class, 'completeDoctorProfile']);
 
 // Public routes - Doctor Search
+Route::get('/specializations', [DoctorController::class, 'getSpecializations']);
 Route::get('/doctors/search', [DoctorController::class, 'search']);
 Route::get('/doctors/{id}', [DoctorController::class, 'show']);
 Route::get('/doctors/{id}/available-slots', [DoctorController::class, 'getAvailableSlots']);
