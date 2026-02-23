@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Appointment;
 use App\Models\Doctor;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 
 class AppointmentController extends Controller
@@ -15,8 +16,21 @@ class AppointmentController extends Controller
     public function create(Request $request)
     {
         $user = $request->user();
+        
+        Log::info('Create appointment called', [
+            'user' => $user ? $user->id : 'null',
+            'user_role' => $user ? $user->role : 'null',
+        ]);
+
+        if (!$user) {
+            Log::error('No authenticated user');
+            return response()->json([
+                'message' => 'Unauthenticated.',
+            ], 401);
+        }
 
         if ($user->role !== 'patient') {
+            Log::error('User is not a patient', ['role' => $user->role]);
             return response()->json([
                 'message' => 'Only patients can book appointments.',
             ], 403);
@@ -55,6 +69,8 @@ class AppointmentController extends Controller
             'appointment_end' => $appointmentEnd,
             'notes' => $validated['notes'] ?? null,
         ]);
+
+        Log::info('Appointment created successfully', ['appointment_id' => $appointment->id]);
 
         return response()->json([
             'message' => 'Appointment created successfully.',
